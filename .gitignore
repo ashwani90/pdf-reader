@@ -1,0 +1,198 @@
+# ==========================
+# Python
+# ==========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+venv.bak/
+ENV/
+env.bak/
+
+# PyInstaller
+# Usually contains build artifacts
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+media/
+staticfiles/
+static/
+uploads/
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# FastAPI stuff:
+*.db
+*.sqlite3
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+doc/_build/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# Poetry
+poetry.lock
+
+# pyre type checker
+.pyre/
+
+# pytype
+.pytype/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# PyCharm
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+.history/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs and temp
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# Secrets
+.env
+.env.*
+*.secret
+secrets.json
+
+# Output and cache folders
+output/
+logs/
+cache/
+tmp/
+temp/
+__pypackages__/
+
+# Coverage & profiling
+.prof
+.profraw
+.cachegrind
+.callgrind
+*.gcov
+*.gcda
+*.gcno
+
+# Backup files
+*~
+
+# pyright and pylance
+typings/
+
+# =========================================
+# Optional: Jupyter, ML, and large models
+# =========================================
+*.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+*.h5
+*.hdf5
+*.pkl
+*.joblib
+*.pt
+*.pth
+*.ckpt
+
+# =========================================
+# Optional: Docker and CI/CD
+# =========================================
+docker-compose.override.yml
+.env.docker
+*.pid
+
+# =========================================
+# Optional: VSCode, PyCharm settings, and OS junk
+# =========================================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+files/
+output/
