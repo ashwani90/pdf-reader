@@ -125,6 +125,7 @@ def split_pdf_api(file_path: str = Query(..., description="Local PDF file path")
         output_file_name = f"{os.path.splitext(os.path.basename(file_path))[0]}_part_{start+1}-{end}.pdf"
         print(output_file_name)
         output_path = os.path.join(output_dir, os.path.splitext(os.path.basename(file_path))[0])
+        os.makedirs(output_path, exist_ok=True)
         output_path = os.path.join(output_path, output_file_name)
 
         with open(output_path, "wb") as out_file:
