@@ -37,6 +37,9 @@ EXCERPTS_TABLE = "financial_excerpts"      # retrieval collection
 EXCERPTS_ID_COL = "id"
 EXCERPTS_TEXT_COL = "excerpt"
 EXCERPTS_FILENAME_COL = "filename"
+# This needs to be changed
+COMPANY = "tata-motor"
+OUTPUT_FILE = "output/processed/tata-motor/tata-motor.txt"
 # EXCERPTS embedding column assumed to be "embedding" of type vector(d)
 
 TOP_K = 5            # number of top passages to retrieve per question
@@ -57,7 +60,7 @@ TEMPERATURE = 0.0
 TOP_P = 0.95
 
 
-OUTPUT_FILE = "output/processed/tata-motor/tata-motor.txt"
+
 
 def save_prompt_to_file(question_id, question_text, passages, prompt):
     """
@@ -167,16 +170,17 @@ def main():
 
         # 2) Retrieve top-k passages using pgvector '<->' operator
         vector_str = "[" + ",".join(map(str, q_emb)) + "]"
-
+        
         cur.execute(
             f"""
             SELECT {EXCERPTS_ID_COL}, {EXCERPTS_TEXT_COL}, {EXCERPTS_FILENAME_COL}
             FROM {EXCERPTS_TABLE}
+            WHERE filename LIKE %s
             ORDER BY embedding <-> %s::vector
             LIMIT %s;
             """,
-            (vector_str, TOP_K)
-        )
+                (f"{COMPANY}%", vector_str, TOP_K)
+            )
         passages = cur.fetchall()
         print(f" Retrieved {len(passages)} passages.")
 
