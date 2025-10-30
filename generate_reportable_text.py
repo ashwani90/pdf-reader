@@ -25,22 +25,44 @@ import shutil
 # Initialize client (ensure OPENAI_API_KEY is set in environment)
 
 # Finance extraction prompt (short version with missing details handling)
+# BASE_PROMPT = """
+# You are a financial analyst AI. From the given company report text, extract and summarize available financial details.
+# Include core metrics (revenue, profit, EPS, margins, cash flow, debt, assets/liabilities), growth trends, segment performance,
+# major strategic moves, and risks/red flags. If some details are missing, note them as “Not mentioned.”
+# Return the result as "JSON" and no other string just {
+#     <key1> : <value1> 
+#     <key2>: <value2>
+#     ...
+# } 
+# Include things like Financial Highlights, Growth & Trends, Risks & Red Flags, Strategic Notes, Analyst Observations.
+# """
+
 BASE_PROMPT = """
-You are a financial analyst AI. From the given company report text, extract and summarize available financial details.
-Include core metrics (revenue, profit, EPS, margins, cash flow, debt, assets/liabilities), growth trends, segment performance,
-major strategic moves, and risks/red flags. If some details are missing, note them as “Not mentioned.”
-Return the result as "JSON" and no other string just {
-    <key1> : <value1> 
-    <key2>: <value2>
-    ...
-} 
-Include things like Financial Highlights, Growth & Trends, Risks & Red Flags, Strategic Notes, Analyst Observations.
+Extract only the information a skilled financial analyst would find useful from the given financial text. Ignore generic commentary or non-financial content. Return clean, valid JSON with dynamic keys reflecting extracted data. Include only relevant quantitative and qualitative insights.
+
+Possible keys (add or omit as needed): company_name, sector, fiscal_year, financial_metrics, growth_rates, assets, liabilities, debt, equity, valuation_metrics, market_trends, risk_factors, analyst_sentiment, data_source
+
+Output example:
+
+{
+  "company_name": "ABC Ltd.",
+  "fiscal_year": "2024-25",
+  "financial_metrics": {
+    "revenue_growth": "15.2%",
+    "retained_earnings": "₹36T",
+    "long_term_debt": "₹33.3T"
+  },
+  "valuation_metrics": {"debt_to_equity": "0.9"},
+  "market_trends": "Expansion in non-current assets",
+  "risk_factors": "Stretched valuations, weak demand"
+}
+Focus only on financially material data and omit null or irrelevant fields.
 """
 
 # File paths
 # only this needs to be changed
 INPUT_FILE = "output/content/tata-motor/tata-motor1.txt"
-OUTPUT_FILE = "report.json"
+OUTPUT_FILE = "output/report.jsonl"
 
 
 
