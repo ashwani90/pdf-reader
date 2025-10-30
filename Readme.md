@@ -29,3 +29,7 @@
 
 - Get answers to questions and create pdf report
 
+
+
+### Config
+- the command ques embedding gen only runs once as it is only used to gen embeddings for stored questions
