@@ -147,7 +147,7 @@ def scan_pdfs(directory_path: str = Query(..., description="Path to the director
     """
     direct = "output/content/"
     # TODO:: Should come from the params
-    orig_text_file = "tata-motor"
+    orig_text_file = "VBL-2023"
     if not os.path.exists(directory_path):
         raise HTTPException(status_code=404, detail=f"Directory not found: {directory_path}")
     
