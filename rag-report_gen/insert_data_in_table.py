@@ -10,7 +10,8 @@ DB_CONFIG = {
     "port": "5432"
 }
 
-INPUT_DIR = "output/content/tata-motor"
+# make this dynamic as per your needs
+INPUT_DIR = "output/content/VBL-2023"
 DELIMITER = "---||---"
 TABLE_NAME = "financial_excerpts"
 
