@@ -141,7 +141,7 @@ def split_pdf_api(file_path: str = Query(..., description="Local PDF file path")
     })
     
 @app.get("/scan-pdfs/")
-def scan_pdfs(directory_path: str = Query(..., description="Path to the directory containing PDFs")):
+def scan_pdfs(directory_path: str = Query(..., description="Path to the directory containing PDFs"), orig_text_file: str = Query(..., description="Original text file name")):
     """
     Scan a directory for PDF files and append their content page by page to a text file.
     """
