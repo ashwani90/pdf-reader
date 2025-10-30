@@ -8,15 +8,24 @@
 
 ## To process a pdf file
 
-- Split the pdf using
--- url http://0.0.0.0:8000/split-pdf/?file_path=files/VBL-2023.pdf
+### Split the pdf using
+- url http://0.0.0.0:8000/split-pdf/?file_path=files/VBL-2023.pdf
 
-- Scan pdf using url
--- http://0.0.0.0:8000/scan-pdfs/?directory_path=split_pdfs/files/VBL-2023/&orig_text_file=VBL-2023
+### Scan pdf using url
 
-- Save text file along with embedding in the db
+- http://0.0.0.0:8000/scan-pdfs/?directory_path=split_pdfs/files/VBL-2023/&orig_text_file=VBL-2023
+- Also change the name inside the file
 
-- Create prompt file with all the questions
+### Save text file along with embedding in the db
+
+- First insert the file using insert command
+- python rag-report_gen/insert_data_in_table.py
+- Also update the name in the file first - TODO: Add dynamic param to get file name
+- Split Larger chnuks into smaller ones using command:
+- python rag-report_gen/split_long_text.py
+
+
+### Create prompt file with all the questions
 
 - Get answers to questions and create pdf report
 
