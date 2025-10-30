@@ -1,6 +1,8 @@
 import psycopg2
 from sentence_transformers import SentenceTransformer
 
+# This will only run once to generate embeddings for questions
+
 # Load a free open-source embedding model (you can swap with others below)
 model = SentenceTransformer("intfloat/e5-large-v2")
 # Other good free models:
