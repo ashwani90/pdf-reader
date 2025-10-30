@@ -123,7 +123,9 @@ def split_pdf_api(file_path: str = Query(..., description="Local PDF file path")
             pdf_writer.add_page(pdf_reader.pages[i])
 
         output_file_name = f"{os.path.splitext(os.path.basename(file_path))[0]}_part_{start+1}-{end}.pdf"
-        output_path = os.path.join(output_dir, output_file_name)
+        print(output_file_name)
+        output_path = os.path.join(output_dir, os.path.splitext(os.path.basename(file_path))[0])
+        output_path = os.path.join(output_path, output_file_name)
 
         with open(output_path, "wb") as out_file:
             pdf_writer.write(out_file)
