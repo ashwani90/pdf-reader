@@ -52,3 +52,10 @@ python rag-report_gen/rag_local_answering.py
 ```
 python generate_reportable_text.py
 ```
+
+### Get answers
+
+```
+
+python export_company_answers.py tata-motor
+```
