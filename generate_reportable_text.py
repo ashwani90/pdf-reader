@@ -21,6 +21,8 @@ import json
 import re
 import time
 import shutil
+import psycopg2
+from datetime import datetime
 
 # Initialize client (ensure OPENAI_API_KEY is set in environment)
 
@@ -99,7 +101,8 @@ def find_txt_files(base_dir):
     Args:
         base_dir (str): The starting directory to search.
     """
-    
+    new_path = False
+    full_path = False
     for root, dirs, files in os.walk(base_dir):
         for file in files:
             if file.lower().endswith(".txt"):
@@ -107,8 +110,6 @@ def find_txt_files(base_dir):
                 new_path = transform_path(full_path)
                 
                 break
-    print(full_path)
-    print(new_path)
     return new_path, full_path
 def transform_path(path: str) -> str:
     """
@@ -180,31 +181,74 @@ def process_section(section_text, new_path):
 
     return "\n\n".join(results)
 
-def main():
-    new_path, full_path = find_txt_files("output/")
+def extract_company_name(filename):
+    """
+    Extracts a clean company name from filename or path.
+    Removes numeric suffixes like 'tata-motor1' → 'tata-motor'.
+    """
+    # Normalize slashes for all OS
+    base = os.path.basename(filename)
+    name, _ = os.path.splitext(base)
+
+    # Remove numeric suffix at end (e.g., motor1 -> motor)
+    name = re.sub(r"\d+$", "", name)
+
+    # Clean up hyphens/underscores and format nicely
+    company_name = name.replace("_", "-").strip().lower()
+
+    return company_name
+
+def insert_prompt_record(cur, prompt, company_name):
+    """
+    Insert a new prompt record in rag_generated_prompts with status 'pending'
+    """
+    cur.execute("""
+        INSERT INTO rag_generated_prompts (prompt, status, created_at, updated_at, company_name)
+        VALUES (%s, %s, %s, %s, %s)
+        RETURNING id;
+    """, (prompt, 'pending', datetime.now(), datetime.now(), company_name))
+
+    record_id = cur.fetchone()[0]
+    print(f"📝 New prompt record inserted with ID {record_id}")
+    return record_id
+
+def main_fun_call():
+    conn = psycopg2.connect(
+        dbname="jkinda_stocks",
+        user="ashwani_ocr",
+        password="ashwani",
+        host="localhost",
+        port=5432
+    )
+    cur = conn.cursor()
+    new_path, full_path = find_txt_files("output/content/")
+    
+    if not full_path:
+        return False
     
     if not os.path.exists(full_path):
         print(f"Error: {full_path} not found")
-        return
+        return False
 
     with open(full_path, "r", encoding="utf-8") as f:
         content = f.read()
 
     # Split sections by delimiter
     sections = content.split("---||---")
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as report:
-        for i, section in enumerate(sections, start=1):
-            section = section.strip()
-            if not section:
-                continue
+    for i, section in enumerate(sections, start=1):
+        section = section.strip()
+        if not section:
+            continue
 
-            print(f"Processing section {i}...")
-            process_section(section, new_path)
-            
-
-            # report.write(f"\n\n=== Report for Section {i} ===\n")
-            # report.write(summary)
-            # report.write("\n\n")
+        print(f"Processing section {i}...")
+        # process_section(section, new_path)
+        prompt = f"{BASE_PROMPT}\n\nCompany Report Excerpt (Part {i}):\n{section}"
+        company_name = extract_company_name(full_path)
+        insert_prompt_record(cur, prompt, company_name)
+        conn.commit()
+        # report.write(f"\n\n=== Report for Section {i} ===\n")
+        # report.write(summary)
+        # report.write("\n\n")
 
     print(f"Report saved to {new_path}")
     move_path = full_path.replace("content", "processed", 1)
@@ -212,6 +256,12 @@ def main():
 
     # Move the file
     shutil.move(full_path, move_path)
+    
+def main():
+    val = True
+    while val:
+        val = main_fun_call()
+    print("All done.")
 
 if __name__ == "__main__":
     main()
