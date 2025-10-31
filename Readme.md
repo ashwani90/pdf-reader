@@ -46,10 +46,9 @@ python rag-report_gen/rag_local_answering.py
 - the command ques embedding gen only runs once as it is only used to gen embeddings for stored questions
 
 
-### Second step is to extract data as json from results excerpts
+
+### To save prompts into db
 
 ```
-
 python generate_reportable_text.py
-
 ```
