@@ -110,19 +110,22 @@ def get_company_answers(company_name):
     """
     cur.execute(query, (company_name,))
     rows = cur.fetchall()
+    json_lists = []
     for row in rows:
+        
         try:
             abc = json.loads(row[2])
             
             abc = extract_and_fix_json(abc['message'])
-            print(abc)
+            json_lists.append(abc)
         except Exception as e:
             print("Error parsing JSON for record ID", row[0], ":", e)
-
+    merged_json = merge_json_objects(json_lists)
+    print(merged_json)
     cur.close()
     conn.close()
 
-    return rows
+    return merged_json
 
 # TODO:: Analysis to be done later on
 # def save_answers_to_file(company_name, rows):
