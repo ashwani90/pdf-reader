@@ -36,7 +36,7 @@ def generate_company_report(company_name, json_list):
     filtered_jsons = json_list
 
     if not filtered_jsons:
-        print(f"⚠️ No data found for company: {company_name}")
+        print(f"No data found for company: {company_name}")
         return
 
     # Merge JSON objects
@@ -53,7 +53,7 @@ def generate_company_report(company_name, json_list):
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(merged_json, f, indent=4, ensure_ascii=False)
 
-    print(f"✅ Report generated at: {file_path}")
+    print(f"Report generated at: {file_path}")
 
 def merge_json_objects(json_list, separator="--|--"):
     def merge_values(existing, new):
@@ -85,7 +85,7 @@ def extract_and_fix_json(raw_text: str):
     Returns a Python dict or None if extraction fails.
     """
 
-    # ✅ Step 1: Try to isolate the JSON using regex
+    #Step 1: Try to isolate the JSON using regex
     match = re.search(r"\{[\s\S]*\}", raw_text)
     if not match:
         print("❌ No JSON found in text")
@@ -93,7 +93,7 @@ def extract_and_fix_json(raw_text: str):
 
     json_text = match.group(0)
 
-    # ✅ Step 2: Auto-clean common LLM formatting mistakes
+    #Step 2: Auto-clean common LLM formatting mistakes
     fixes = [
         (r",\s*}", "}"),             # Remove trailing commas before closing brace
         (r",\s*]", "]"),             # Remove trailing commas before closing bracket
@@ -102,7 +102,7 @@ def extract_and_fix_json(raw_text: str):
     for pattern, repl in fixes:
         json_text = re.sub(pattern, repl, json_text)
 
-    # ✅ Step 3: Try parsing, retry with additional fixes if needed
+    # Step 3: Try parsing, retry with additional fixes if needed
     try:
         return json.loads(json_text)
     except json.JSONDecodeError as e:
@@ -114,8 +114,8 @@ def extract_and_fix_json(raw_text: str):
         try:
             return json.loads(json_text_fixed)
         except Exception as e2:
-            print("❌ Failed to decode JSON:", e2)
-            print("📌 Final extracted attempt:\n", json_text_fixed)
+            print("Failed to decode JSON:", e2)
+            print("Final extracted attempt:\n", json_text_fixed)
             return None
 
 def get_company_answers(company_name):
@@ -177,7 +177,7 @@ def get_company_answers(company_name):
 #             f.write(f"Answer:\n{answer or '[No Answer]'}\n")
 #             f.write("\n" + "-" * 100 + "\n\n")
 
-#     print(f"✅ Exported {len(rows)} records to {filename}")
+#     print(f"Exported {len(rows)} records to {filename}")
 
 
 def main():
