@@ -33,10 +33,7 @@ def generate_company_report(company_name, json_list):
     """
     
     # Filter JSONs based on company_name match (case-insensitive)
-    filtered_jsons = [
-        item for item in json_list
-        if item.get("company_name", "").lower() == company_name.lower()
-    ]
+    filtered_jsons = json_list
 
     if not filtered_jsons:
         print(f"⚠️ No data found for company: {company_name}")
@@ -153,6 +150,7 @@ def get_company_answers(company_name):
         except Exception as e:
             print("Error parsing JSON for record ID", row[0], ":", e)
     merged_json = merge_json_objects(json_lists)
+    merged_json = generate_company_report(company_name, json_lists)
     print(merged_json)
     cur.close()
     conn.close()
