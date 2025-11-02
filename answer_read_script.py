@@ -12,6 +12,8 @@ Usage:
 import psycopg2
 import sys
 from datetime import datetime
+import json
+import re
 
 # ========= CONFIG ========= #
 DB_NAME = "jkinda_stocks"
@@ -23,6 +25,45 @@ DB_PORT = "5432"
 TABLE_NAME = "rag_generated_prompts"
 OUTPUT_DIR = "output/answers"
 # ========================== #
+
+def extract_and_fix_json(raw_text: str):
+    """
+    Extract JSON block from messy LLM response text and auto-fix common formatting errors.
+    Returns a Python dict or None if extraction fails.
+    """
+
+    # ✅ Step 1: Try to isolate the JSON using regex
+    match = re.search(r"\{[\s\S]*\}", raw_text)
+    if not match:
+        print("❌ No JSON found in text")
+        return None
+
+    json_text = match.group(0)
+
+    # ✅ Step 2: Auto-clean common LLM formatting mistakes
+    fixes = [
+        (r",\s*}", "}"),             # Remove trailing commas before closing brace
+        (r",\s*]", "]"),             # Remove trailing commas before closing bracket
+        (r"[\u201C\u201D]", '"'),    # Replace fancy quotes with standard quotes
+    ]
+    for pattern, repl in fixes:
+        json_text = re.sub(pattern, repl, json_text)
+
+    # ✅ Step 3: Try parsing, retry with additional fixes if needed
+    try:
+        return json.loads(json_text)
+    except json.JSONDecodeError as e:
+        print("⚠ JSON decode error, trying fallback fix:", e)
+
+        # Second pass — sometimes quotes missing on keys
+        json_text_fixed = re.sub(r"(\w+):", r'"\1":', json_text)
+        
+        try:
+            return json.loads(json_text_fixed)
+        except Exception as e2:
+            print("❌ Failed to decode JSON:", e2)
+            print("📌 Final extracted attempt:\n", json_text_fixed)
+            return None
 
 def get_company_answers(company_name):
     """
@@ -40,11 +81,19 @@ def get_company_answers(company_name):
     query = f"""
         SELECT id, prompt, answer, status, created_at
         FROM {TABLE_NAME}
-        WHERE company_name = %s
+        WHERE company_name = %s AND status='answered'
         ORDER BY created_at ASC;
     """
     cur.execute(query, (company_name,))
     rows = cur.fetchall()
+    for row in rows:
+        try:
+            abc = json.loads(row[2])
+            
+            abc = extract_and_fix_json(abc['message'])
+            print(abc)
+        except Exception as e:
+            print("Error parsing JSON for record ID", row[0], ":", e)
 
     cur.close()
     conn.close()
