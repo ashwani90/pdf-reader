@@ -59,3 +59,10 @@ python generate_reportable_text.py
 
 python export_company_answers.py tata-motor
 ```
+
+### Get the report for a company in browser (could be used by some others)
+
+```
+http://0.0.0.0:8000/company-report/?company_name=vbl-
+
+```
