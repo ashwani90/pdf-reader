@@ -7,6 +7,7 @@ import os
 import uvicorn
 from fastapi.responses import StreamingResponse
 import shutil
+import json
 
 app = FastAPI(title="PDF Reader API", version="1.1")
 
