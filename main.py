@@ -44,6 +44,36 @@ def read_pdf_from_url(url: str) -> str:
     for page in pdf_reader.pages:
         text += page.extract_text() or ""
     return text
+    
+@app.get("/company-report/")
+def get_company_report(
+    company_name: str = Query(..., description="Exact company name as used in stored JSON")
+):
+    """
+    Example usage:
+    http://localhost:8000/company-report/?company_name=Varun%20Beverages%20Limited
+    """
+    folder_path = os.path.join("output", "reports", company_name)
+    file_path = os.path.join(folder_path, f"{company_name}.json")
+
+    if not os.path.exists(folder_path):
+        raise HTTPException(status_code=404, detail=f"No folder found for company '{company_name}'")
+
+    if not os.path.isfile(file_path):
+        raise HTTPException(status_code=404, detail="Merged JSON file not found for this company")
+
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        return JSONResponse(
+            content=data,
+            media_type="application/json",
+            status_code=200
+        )
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error reading JSON: {e}")
 
 @app.get("/read-pdf/")
 def read_pdf_api(source: str = Query(..., description="PDF local path or URL")):
