@@ -14,6 +14,7 @@ import sys
 from datetime import datetime
 import json
 import re
+import os
 
 # ========= CONFIG ========= #
 DB_NAME = "jkinda_stocks"
@@ -25,6 +26,37 @@ DB_PORT = "5432"
 TABLE_NAME = "rag_generated_prompts"
 OUTPUT_DIR = "output/answers"
 # ========================== #
+
+def generate_company_report(company_name, json_list):
+    """
+    Filter JSON list by company name, merge them, and store JSON in output/reports/<company_name>/<company_name>.json
+    """
+    
+    # Filter JSONs based on company_name match (case-insensitive)
+    filtered_jsons = [
+        item for item in json_list
+        if item.get("company_name", "").lower() == company_name.lower()
+    ]
+
+    if not filtered_jsons:
+        print(f"⚠️ No data found for company: {company_name}")
+        return
+
+    # Merge JSON objects
+    merged_json = merge_json_objects(filtered_jsons)
+
+    # Create directory structure output/reports/<company_name>
+    folder_path = os.path.join("output", "reports", company_name)
+    os.makedirs(folder_path, exist_ok=True)
+
+    # File path
+    file_path = os.path.join(folder_path, f"{company_name}.json")
+
+    # Save merged JSON to file
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(merged_json, f, indent=4, ensure_ascii=False)
+
+    print(f"✅ Report generated at: {file_path}")
 
 def merge_json_objects(json_list, separator="--|--"):
     def merge_values(existing, new):
