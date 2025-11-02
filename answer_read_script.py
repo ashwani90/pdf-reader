@@ -26,6 +26,30 @@ TABLE_NAME = "rag_generated_prompts"
 OUTPUT_DIR = "output/answers"
 # ========================== #
 
+def merge_json_objects(json_list, separator="--|--"):
+    def merge_values(existing, new):
+        # If both are dicts → merge recursively
+        if isinstance(existing, dict) and isinstance(new, dict):
+            return merge_dicts(existing, new)
+
+        # Convert both values to string for merging
+        return f"{existing}{separator}{new}"
+
+    def merge_dicts(d1, d2):
+        merged = dict(d1)
+        for key, val in d2.items():
+            if key in merged:
+                merged[key] = merge_values(merged[key], val)
+            else:
+                merged[key] = val
+        return merged
+
+    result = {}
+    for obj in json_list:
+        result = merge_dicts(result, obj)
+
+    return result
+
 def extract_and_fix_json(raw_text: str):
     """
     Extract JSON block from messy LLM response text and auto-fix common formatting errors.
