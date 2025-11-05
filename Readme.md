@@ -16,7 +16,7 @@ url http://0.0.0.0:8000/split-pdf/?file_path=files/VBL-2023.pdf
 ```
 http://0.0.0.0:8000/scan-pdfs/?directory_path=split_pdfs/files/VBL-2023/&orig_text_file=VBL-2023
 ```
-- Also change the name inside the file
+- Deprecated: Also change the name inside the file, updated For this to be not needed
 
 ### Save text file along with embedding in the db
 
