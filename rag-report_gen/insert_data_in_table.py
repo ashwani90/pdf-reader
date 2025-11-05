@@ -11,7 +11,7 @@ DB_CONFIG = {
 }
 
 # make this dynamic as per your needs
-INPUT_DIR = "output/content/VBL-2023"
+INPUT_DIR = "output/content/Lg-el"
 DELIMITER = "---||---"
 TABLE_NAME = "financial_excerpts"
 
