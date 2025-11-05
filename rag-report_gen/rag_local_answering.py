@@ -15,7 +15,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from pgvector.psycopg2 import register_vector
 from sentence_transformers import SentenceTransformer
-
+from datetime import datetime
 # -------------------------
 # CONFIG
 # -------------------------
@@ -38,8 +38,8 @@ EXCERPTS_ID_COL = "id"
 EXCERPTS_TEXT_COL = "excerpt"
 EXCERPTS_FILENAME_COL = "filename"
 # This needs to be changed
-COMPANY = "tata-motor"
-OUTPUT_FILE = "output/processed/tata-motor/tata-motor.txt"
+COMPANY = "Lg-el"                     # filter excerpts by filename starting with this company name
+OUTPUT_FILE = "output/processed/Lg-el/Lg-el.txt"
 # EXCERPTS embedding column assumed to be "embedding" of type vector(d)
 
 TOP_K = 5            # number of top passages to retrieve per question
@@ -59,7 +59,23 @@ MAX_TOKENS = 256
 TEMPERATURE = 0.0
 TOP_P = 0.95
 
+def insert_prompt_record(cur, prompt, company_name, conn):
+    """
+    Insert a new prompt record in rag_generated_prompts with status 'pending'
+    """
+    try:
+        cur.execute("""
+            INSERT INTO rag_generated_prompts (prompt, status, created_at, updated_at, company_name,"type")
+            VALUES (%s, %s, %s, %s, %s, %s);
+        """, (prompt, 'pending', datetime.now(), datetime.now(), company_name, "1"))
 
+        # record_id = cur.fetchone()[0]
+        # print(f"📝 New prompt record inserted with ID {record_id}")
+    except Exception as e:
+        print(e)
+        # record_id = None
+    # return record_id
+    conn.commit()
 
 
 def save_prompt_to_file(question_id, question_text, passages, prompt):
@@ -70,15 +86,15 @@ def save_prompt_to_file(question_id, question_text, passages, prompt):
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
 
     with open(OUTPUT_FILE, "a", encoding="utf-8") as f:
-        f.write(f"Question ID: {question_id}\n")
-        f.write(f"Question: {question_text}\n\n")
+        # f.write(f"Question ID: {question_id}\n")
+        # f.write(f"Question: {question_text}\n\n")
 
-        f.write("Top Retrieved Passages:\n")
-        for idx, (pid, excerpt, filename) in enumerate(passages, 1):
-            f.write(f"  Passage {idx} (File: {filename}, ID: {pid}):\n")
-            f.write(excerpt.strip() + "\n\n")
+        # f.write("Top Retrieved Passages:\n")
+        # for idx, (pid, excerpt, filename) in enumerate(passages, 1):
+        #     f.write(f"  Passage {idx} (File: {filename}, ID: {pid}):\n")
+        #     f.write(excerpt.strip() + "\n\n")
 
-        f.write("Generated Prompt:\n")
+        # f.write("Generated Prompt:\n")
         f.write(prompt.strip() + "\n")
 
         f.write("\n" + ("-" * 100) + "\n\n")
@@ -189,9 +205,10 @@ def main():
         else:
             # 3) Build prompt with retrieved passages
             prompt = build_prompt(qtext, passages)
-            print(passages)
-            save_prompt_to_file(qid, qtext, passages, prompt)
-            print(prompt)
+            insert_prompt_record(cur, prompt, COMPANY, conn)
+            # print(passages)
+            # save_prompt_to_file(qid, qtext, passages, prompt)
+            # print(prompt)
 
             # 4) Ask LLM to generate answer from context
             
