@@ -12,6 +12,16 @@ from transformers import (
 )
 from transformers.trainer_utils import set_seed
 from pathlib import Path
+import transformers
+print("TrainingArguments class from:", TrainingArguments.__module__)
+print("Class file path:", TrainingArguments.__init__.__code__.co_filename)
+training_args = TrainingArguments(
+    output_dir="./results",
+    evaluation_strategy="steps",
+    eval_steps=100,
+)
+
+print("✅ TrainingArguments works fine")
 
 # ========================
 # Config
@@ -86,7 +96,7 @@ data_collator = DataCollatorForLanguageModeling(
     tokenizer=tokenizer,
     mlm=False  # IMPORTANT: causal LM, not masked LM
 )
-
+print("Transformers version in runtime:", transformers.__version__)
 # ========================
 # Training args & Trainer
 # ========================
