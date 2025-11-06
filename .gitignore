@@ -200,3 +200,4 @@ output/
 news.jsonl
 
 small-model-trainer/data/
+small-model-trainer/checkpoints/
