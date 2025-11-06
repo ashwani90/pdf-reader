@@ -196,3 +196,7 @@ Thumbs.db
 
 files/
 output/
+
+news.jsonl
+
+small-model-trainer/data/
