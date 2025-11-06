@@ -11,7 +11,7 @@ This project implements a **two-stage answering system**:
 ```
 
 python train_small_expert.py \
-  --base_model <your-small-instruct-model> \
+  --base_model google/flan-t5-base \
   --train_file data/sample_train.jsonl \
   --output_dir checkpoints/small_expert_lora \
   --batch_size 2 --epochs 3 --lr 2e-4
@@ -20,7 +20,7 @@ python train_small_expert.py \
 # run the model
 ```
 python serve_pipeline.py \
-  --small_base_model <your-small-instruct-model> \
+  --small_base_model google/flan-t5-base \
   --small_lora_path checkpoints/small_expert_lora \
   --base_llama meta-llama/Llama-3.1-8B-Instruct \
   --port 8000
