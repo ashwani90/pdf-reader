@@ -6,7 +6,7 @@ This project implements a **two-stage answering system**:
    - **(B)** produce a compact, factual context (short summary / set of facts) for the query.
 2) **Base LLaMA model** that receives the user query **plus** the small-model output in its prompt and generates the final answer.
 
-#
+# Train the model
 
 ```
 
