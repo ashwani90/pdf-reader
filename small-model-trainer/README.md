@@ -40,7 +40,7 @@ curl -X POST http://localhost:8000/qa \
 ## Run text model
 
 ```
-python train_small_expert.py \
+python train_text_model.py \
   --base_model google/flan-t5-base \
   --train_file data/train.txt \
   --output_dir checkpoints/small_expert_lora \
