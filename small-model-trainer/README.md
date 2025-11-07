@@ -26,3 +26,13 @@ python serve_pipeline.py \
   --port 8000
 
 ```
+
+# Using the model
+```
+curl -X POST http://localhost:8000/qa \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "Which companies opened new factories in 2021?",
+    "extras": {"top_k": 5}
+  }'
+```
