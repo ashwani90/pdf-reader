@@ -41,11 +41,9 @@ curl -X POST http://localhost:8000/qa \
 
 ```
 python train_text_model.py \
-  --base_model google/flan-t5-base \
+  --base_model google/flan-t5-small \
   --train_file data/train.txt \
   --output_dir checkpoints/small_expert_lora \
-  --batch_size 2 \
-  --epochs 3 \
-  --lr 2e-4
+  --batch_size 1 --epochs 3
 
 ```
