@@ -36,3 +36,16 @@ curl -X POST http://localhost:8000/qa \
     "extras": {"top_k": 5}
   }'
 ```
+
+## Run text model
+
+```
+python train_small_expert.py \
+  --base_model google/flan-t5-base \
+  --train_file data/train.txt \
+  --output_dir checkpoints/small_expert_lora \
+  --batch_size 2 \
+  --epochs 3 \
+  --lr 2e-4
+
+```
