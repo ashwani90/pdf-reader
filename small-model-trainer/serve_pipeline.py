@@ -95,8 +95,8 @@ def main():
                         help="Base name of the small expert (e.g. google/flan-t5-base)")
     parser.add_argument("--small_lora_path", required=True,
                         help="Path to the fine-tuned LoRA weights")
-    parser.add_argument("--base_llama", required=True,
-                        help="Name of the larger model, e.g. meta-llama/Llama-3.1-8B-Instruct")
+    # parser.add_argument("--base_llama", required=True,
+    #                     help="Name of the larger model, e.g. meta-llama/Llama-3.1-8B-Instruct")
     parser.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()
 
