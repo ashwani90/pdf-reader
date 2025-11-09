@@ -20,9 +20,8 @@ python train_small_expert.py \
 # run the model
 ```
 python serve_pipeline.py \
-  --small_base_model google/flan-t5-base \
+  --small_base_model google/flan-t5-small \
   --small_lora_path checkpoints/small_expert_lora \
-  --base_llama meta-llama/Llama-3.1-8B-Instruct \
   --port 8000
 
 ```
