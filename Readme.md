@@ -16,6 +16,15 @@ url http://0.0.0.0:8000/split-pdf/?file_path=files/VBL-2023.pdf
 ```
 http://0.0.0.0:8000/scan-pdfs/?directory_path=split_pdfs/files/VBL-2023/&orig_text_file=VBL-2023
 ```
+
+### Another version of it
+- This would just extract content and show it not save into a file
+```
+
+http://0.0.0.0:8000/scan-images/?directory_path=files/small/&orig_text_file=Groww
+
+```
+
 - Deprecated: Also change the name inside the file, updated For this to be not needed
 
 ### Save text file along with embedding in the db
